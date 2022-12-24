@@ -1,0 +1,115 @@
+
+{ Common adventure library by Robert Szacki, (C) 2022 }
+
+MESSAGE "Compiling common adventure library.\n";
+
+ARTICLE a, an, the;
+
+VERB quit; { System verbs }
+
+VERB look, take, drop, go, examine, inventory; { Basic verbs }
+
+VERB north, south, east, west, up, down; { Directions }
+
+VAR describe, lastLoc;
+
+{ Verb synonyms }
+
+n = north;
+e = east;
+s = south;
+w = west;
+u = up;
+d = down;
+x = examine;
+l = look;
+i = inventory;
+get = take;
+
+SEEN = 16;
+HIDDEN = 15;
+NOTAKE = 14;
+
+checkAvail = 
+	LOCAL item;
+	
+	($setg item ($cont ($loc .ME)))
+	(WHILE @item DO
+		(IF ($and ($eq @item %1) ($not ($prop @item HIDDEN))) THEN
+			($return 1))
+		($setg item ($link @item)))
+			
+	($say "You can't see " ($name %1) " here.\n")
+	($return 0)
+	;
+
+take( PREACT ) =
+	(IF ($eq @Numd 0) THEN 
+		($say "Please write what to take.\n")
+		($exit 1))
+	(IF ($not (checkAvail @Dobj)) THEN
+		($exit 1))
+	(IF ($prop @Dobj NOTAKE) THEN	
+		($say "You can't take the " ($name @Dobj) ".\n")
+		($exit 1))
+	($say "You picked up the " ($name @Dobj) ".\n")
+	($move @Dobj .ME)
+	;
+
+examine( PREACT ) = 
+	(IF ($eq @Numd 0) THEN 
+		($say "Please write what to examine.\n")
+		($exit 1))
+	(IF ($not (checkAvail @Dobj)) THEN
+		($exit 1))
+	;
+	
+examine( ACTION ) = 
+	($say "You see nothing special about " ($name @Dobj) ".\n")
+	;
+
+quit( ACTION ) = ($spec 3)
+	;
+
+look( ACTION ) = ($setg describe 1) ($setp ($loc .ME) SEEN 0)
+	;
+	
+inventory( ACTION ) = 
+	LOCAL item;
+	($setg item ($cont .ME))
+	(IF @item THEN
+		($say "You are carrying:\n")
+	ELSE
+		($say "You are empty-handed.\n"))
+		
+	(WHILE @item DO 		
+		(($sdesc @item)) ($say "\n") ($setg item ($link @item)))
+	;
+
+Prompter = ($say "\nWhat next? ");
+
+cg = ($say "You can't go that way.\n");
+
+Looker = LOCAL item, printed;
+	($setg item ($cont ($loc .ME)))
+	
+	(IF ($or @describe ($ne @lastLoc ($loc .ME))) THEN	
+		(IF ($not ($prop ($loc .ME) SEEN)) THEN 
+			(($ldesc ($loc .ME)))
+			(WHILE @item DO 
+				(IF ($not ($prop @item HIDDEN)) THEN
+					(($ldesc @item))) ($setg item ($link @item)))
+		ELSE
+			(($sdesc ($loc .ME)))
+			(WHILE @item DO 
+				(IF ($not ($prop @item HIDDEN)) THEN
+					(IF ($not @printed) THEN ($say "You can see:\n") ($setg printed 1))
+					(($sdesc @item)) ($say "\n")) ($setg item ($link @item))))
+		
+		($setp ($loc .ME) SEEN 1))
+	($setg lastLoc ($loc .ME))
+	($setg describe 0)
+	;
+	
+NOVERB( ACTION ) = ($say "Please write what action to perform.\n") ($exit 3)
+	;

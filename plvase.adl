@@ -1,0 +1,58 @@
+
+{ "Priceless Vase" adventure game by Robert Szacki, (C)2022 }
+
+INCLUDE "common.adl";
+
+MESSAGE "Compiling Priceless Vase.\n";
+
+ADJEC hotel, lunch, mining, sports;
+
+NOUN hotel room; { Hotel room }
+
+NOUN corridor;
+
+NOUN lunch room;
+
+NOUN kitchen;
+
+NOUN library;
+
+NOUN sport;
+
+NOUN mining museum;
+
+NOUN sports hall;
+
+NOUN reception;
+
+NOUN basement;
+
+NOUN forest;
+
+NOUN parking;
+
+INCLUDE "hotel.adl";
+
+corridor( LDESC ) = ($say "You are in main corridor of the hotel. Bright lamp is on the roof. Your room to the south.\n")
+	;
+	
+corridor( SDESC ) = ($say "Main corridor.\n")
+	;
+
+hotel room( ACTION ) = 
+	($miss 0 cg cg cg cg cg cg cg cg cg)
+	($hit .ME corridor 0 0 0 0 0 0 0 0 0);
+	
+	
+corridor( ACTION ) = 
+	($miss cg 0 cg cg cg cg cg cg cg cg)
+	($hit .ME 0 [hotel room] 0 0 0 0 0 0 0 0);
+
+START = ($say "\nIntroduction:\nYour name is Anthony Smith. You are traveller seeking the adventures.\n")
+		($say "Recently you experienced financial problems, thus you decided to go to a trip.\n\n")		
+		($prompt Prompter)
+		($setg describe 1)
+		($sdem Looker)
+		($setv north south east west up down 0 0 0 0)
+		($actor player 0 1) { Activate player }
+		;

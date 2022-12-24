@@ -1,0 +1,51 @@
+
+{ "Priceless Vase" adventure game by Robert Szacki, (C)2022 }
+
+{ Hotel room }
+
+MESSAGE "Compiling hotel room.\n";
+
+hotel room( LDESC ) = ($say "You are in your hotel room.\nIt's a tiny room. ")
+	($say "The exit to corridor is on the north side.\n")
+	;
+hotel room( SDESC ) = ($say "Your hotel room.\n");
+
+NOUN player( hotel room );
+
+player( HIDDEN ) = 1;
+
+NOUN coin( hotel room );
+
+coin( SDESC ) = ($say "A gold coin");
+
+coin( LDESC ) = ($say "There is a gold coin here lying around.\n");
+
+coin( HIDDEN ) = 1;
+
+NOUN case( hotel room );
+
+case( SDESC ) = ($say "A case");
+
+case( LDESC ) = ($say "You noticed your black case here.\n");
+
+NOUN ticket( hotel room );
+
+ticket( SDESC ) = ($say "A ticket");
+
+ticket( LDESC ) = ($say "There is a ticket here.\n");
+
+ticket( HIDDEN ) = 1;
+
+NOUN table( hotel room );
+
+table( NOTAKE ) = 1;
+
+table( SDESC ) = ($say "A table");
+
+table( LDESC ) = ($say "There is a table in the center.\n");
+
+table( ACTION ) = 
+	(IF ($eq @Verb examine) THEN
+		(IF ($prop ticket HIDDEN) THEN ($say "You found a coin and a ticket in the drawer.\n") ($setp ticket HIDDEN 0) ($setp coin HIDDEN 0) ($exit 2)))
+		
+	;

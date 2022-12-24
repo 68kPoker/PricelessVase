@@ -1,0 +1,31 @@
+Gra przygodowa "Bezcenna waza" (Priceless Vase)
+
+1. Scenariusz:
+
+Gra rozpoczyna się w pokoju hotelowym. Nazywasz się Anthony Smith, jesteś podróżnikiem szukającym przygód.
+W tę podróż wybrałeś się, by odnaleźć drogocenne skarby, bo ostatnio masz kłopoty finansowe i liczysz na to, że
+odnalezione skarby podreperują Twoją kondycję finansową.
+
+W Twoim pokoju znajduje się stół, na którym leży moneta oraz zamknięta walizka.
+W szufladzie zaś znajduje sie bilet. Jesteś dość zmęczony i głodny.
+
+Na zewnątrz pokoju jest korytarz. Możesz zamknąć drzwi swojego pokoju na klucz. Możesz się dostać do 
+sąsiednich pomieszczeń, jak: stołówka, biblioteka, recepcja oraz sala sportowa. Muzeum górnictwa jest
+zamknięte dla odwiedzających. Do kuchni wejścia blokuje kucharz, który da się przekupić monetą.
+
+W kuchni znajdziesz kanapkę z serem i pomidorem. Po zjedzeniu posiłku przypomni Ci sie numer Twojej karty 
+bibliotecznej. W bibliotece po podaniu numeru będziesz mógł wypożyczyć książki. Po poszukaniu znajdziesz książkę
+o grzybach. Z książki dowiesz się które grzyby są jadalne.
+
+W gazecie przeczytasz prognozę pogody. Będzie padać około godziny 12. W tej godzinie zacznie padać i będziesz 
+mógł wyjść na zewnątrz i poszukać grzybów. Dzięki książce wybierzesz te jadalne.
+
+Wrocisz do kuchni i ugotujesz ulubioną zupę grzybową. Po zjedzeniu nabierzesz sił by w sali sportowej zagrać
+mecz koszykówki. Po wygraniu meczu dostaniesz zaproszenie do odwiedzenia muzeum górnictwa.
+Okaż zaproszenie w recepcji, żeby dostać klucz do muzeum.
+
+W muzeum górnictwa znajdziesz takie eksponaty jak węgiel, rudę żelaza i rudę złota. Schowaj węgiel do walizki. Weź
+stempel. Teraz postempluj bilet i wróć do recepcji.
+
+Zostaniesz wpuszczony do piwnicy. Wrzuć węgiel do pieca i poszukaj drogocennej wazy. Weź wazę i wyjdź na zewnątrz.
+Włoż wazę do bagażnika i wyrusz do domu.
