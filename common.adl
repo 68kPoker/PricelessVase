@@ -29,16 +29,19 @@ get = take;
 SEEN = 16;
 HIDDEN = 15;
 NOTAKE = 14;
+	
+checkInv =
+	(IF ($and ($eq ($loc %1) .ME ($not ($prop %1 HIDDEN)))) THEN
+		($return 1))
+	
+	($say "You don't have " ($name %1) ".\n")
+	($return 0)
+	;
 
 checkAvail = 
-	LOCAL item;
+	(IF ($and ($eq ($loc %1) ($loc .ME)) ($not ($prop %1 HIDDEN))) THEN
+		($return (checkInv %1)))
 	
-	($setg item ($cont ($loc .ME)))
-	(WHILE @item DO
-		(IF ($and ($eq @item %1) ($not ($prop @item HIDDEN))) THEN
-			($return 1))
-		($setg item ($link @item)))
-			
 	($say "You can't see " ($name %1) " here.\n")
 	($return 0)
 	;
@@ -47,7 +50,11 @@ take( PREACT ) =
 	(IF ($eq @Numd 0) THEN 
 		($say "Please write what to take.\n")
 		($exit 1))
-	(IF ($not (checkAvail @Dobj)) THEN
+	(IF ($eq ($loc @Dobj) .ME) THEN
+		($say "You are already carrying " ($name @Dobj) ".\n")
+		($exit 1))
+	(IF ($or ($ne ($loc @Dobj) ($loc .ME)) ($eq ($prop @Dobj HIDDEN) 1)) THEN
+		($say "You can't see " ($name @Dobj) " here.\n")
 		($exit 1))
 	(IF ($prop @Dobj NOTAKE) THEN	
 		($say "You can't take the " ($name @Dobj) ".\n")
@@ -60,7 +67,8 @@ examine( PREACT ) =
 	(IF ($eq @Numd 0) THEN 
 		($say "Please write what to examine.\n")
 		($exit 1))
-	(IF ($not (checkAvail @Dobj)) THEN
+	(IF ($or ($prop @Dobj HIDDEN) ($and ($ne ($loc @Dobj) .ME) ($ne ($loc @Dobj) ($loc .ME)))) THEN
+		($say "You can't see " ($name @Dobj) " here.\n")
 		($exit 1))
 	;
 	

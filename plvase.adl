@@ -17,8 +17,6 @@ NOUN kitchen;
 
 NOUN library;
 
-NOUN sport;
-
 NOUN mining museum;
 
 NOUN sports hall;
@@ -33,25 +31,82 @@ NOUN parking;
 
 INCLUDE "hotel.adl";
 
+VAR chefBlocking;
+
+NOUN chef( lunch room );
+
+chef( LDESC ) = ($say "There is a chef here.\n");
+
+chef( SDESC ) = ($say "A chef.");
+
+chef( NOTAKE ) = 1;
+
+VERB give;
+PREP to;
+
+give( PREACT ) = 
+	(IF ($not @Dobj) THEN ($say "Give what?\n") ($exit 1))
+	(IF ($not @Iobj) THEN ($say "Give it to who?\n") ($exit 1))
+	(IF ($ne ($loc @Iobj) ($loc .ME)) THEN ($say "You can't see " ($name @Iobj) " here.\n") ($exit 1))
+	(IF ($ne ($loc @Dobj) .ME) THEN ($say "You don't have " ($name @Dobj) ".\n") ($exit 1))
+	;
+
+chef( ACTION ) = 
+	(IF ($eq @Iobj chef) THEN		
+		(IF ($eq @Dobj coin) THEN			
+			(IF ($and ($eq @Verb give) ($eq @Prep to)) THEN
+				($say "The chef has taken your coin and let you pass.\n")
+				($setg chefBlocking 0)
+				($move coin .ALL))			
+			ELSE 
+				($say "The chef seems to be not interested.\n"))
+		)
+	;
+
 corridor( LDESC ) = ($say "You are in main corridor of the hotel. Bright lamp is on the roof. Your room to the south.\n")
 	;
 	
 corridor( SDESC ) = ($say "Main corridor.\n")
 	;
+	
+
+
+lunch room( LDESC ) = ($say "You are in a lunch room. There are many tables here. There is a main hotel corridor to the south and the hotel kitchen to the east.\n")
+	;
+
+lunch room( SDESC) = ($say "A lunch room.\n")
+	;
+
+kitchen( LDESC ) = ($say "You are in a kitchen. There is a lunch room to the west.\n");
+
+kitchen( SDESC ) = ($say "A kitchen.\n");
 
 hotel room( ACTION ) = 
 	($miss 0 cg cg cg cg cg cg cg cg cg)
 	($hit .ME corridor 0 0 0 0 0 0 0 0 0);
 	
 	
+checkKitchen = (IF @chefBlocking THEN
+	($say "The chef is blocking the way.\n") ($exit 1));
+		
 corridor( ACTION ) = 
-	($miss cg 0 cg cg cg cg cg cg cg cg)
-	($hit .ME 0 [hotel room] 0 0 0 0 0 0 0 0);
+	($miss 0 0 cg cg cg cg cg cg cg cg)
+	($hit .ME [lunch room] [hotel room] 0 0 0 0 0 0 0 0);
+
+lunch room( ACTION ) = 
+	($miss cg 0 checkKitchen cg cg cg cg cg cg cg)
+	($hit .ME 0 corridor kitchen 0 0 0 0 0 0 0);
+	
+kitchen( ACTION ) =
+	($miss cg cg cg 0 cg cg cg cg cg cg)
+	($hit .ME 0 0 0 [lunch room] 0 0 0 0 0 0);
+	
 
 START = ($say "\nIntroduction:\nYour name is Anthony Smith. You are traveller seeking the adventures.\n")
 		($say "Recently you experienced financial problems, thus you decided to go to a trip.\n\n")		
 		($prompt Prompter)
 		($setg describe 1)
+		($setg chefBlocking 1)
 		($sdem Looker)
 		($setv north south east west up down 0 0 0 0)
 		($actor player 0 1) { Activate player }
